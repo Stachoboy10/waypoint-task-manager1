@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Waypoint — Project &amp; Task Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR: the route of projects ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">&#9679;</span>
+      <span class="brand-name">Waypoint</span>
+    </div>
+    <p class="brand-tag">Every project is a route. Every task, a stop.</p>
+
+    <div class="route-list" id="routeList">
+      <!-- project items injected here -->
+    </div>
+
+    <button class="new-project-btn" id="newProjectBtn">+ Start a new route</button>
+
+    <form class="new-project-form hidden" id="newProjectForm">
+      <input type="text" id="projectNameInput" placeholder="Route name" required maxlength="60" />
+      <textarea id="projectDescInput" placeholder="What's this route for? (optional)" rows="2"></textarea>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Create</button>
+        <button type="button" class="btn-ghost" id="cancelProjectBtn">Cancel</button>
+      </div>
+    </form>
+
+    <div class="conn-status" id="connStatus">
+      <span class="dot"></span>
+      <span id="connStatusText">Connecting to backend&hellip;</span>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN: the selected route's board ============ -->
+  <main class="board-area">
+
+    <div class="empty-state" id="emptyState">
+      <h2>No route selected</h2>
+      <p>Pick a project on the left, or start a new one, to see its tasks.</p>
+    </div>
+
+    <div class="board-content hidden" id="boardContent">
+
+      <header class="board-header">
+        <div>
+          <h1 id="projectTitle">Project name</h1>
+          <p id="projectDesc" class="muted"></p>
+        </div>
+        <div class="board-header-actions">
+          <button class="btn-ghost small" id="renameProjectBtn">Rename</button>
+          <button class="btn-ghost small danger" id="deleteProjectBtn">Delete route</button>
+        </div>
+      </header>
+
+      <div class="filter-bar">
+        <span class="muted">Filter by priority:</span>
+        <div class="chip-group" id="priorityFilter">
+          <button class="chip active" data-priority="all">All</button>
+          <button class="chip" data-priority="low">Low</button>
+          <button class="chip" data-priority="medium">Medium</button>
+          <button class="chip" data-priority="high">High</button>
+        </div>
+      </div>
+
+      <!-- the dotted line connecting stops on the route -->
+      <div class="route-line" aria-hidden="true">
+        <span class="stop"></span><span class="stop"></span><span class="stop"></span>
+      </div>
+
+      <div class="columns" id="columns">
+        <section class="column" data-status="todo">
+          <h3 class="column-title">To do <span class="count" id="count-todo">0</span></h3>
+          <div class="card-list" id="list-todo"></div>
+          <button class="add-task-btn" data-status="todo">+ Add task</button>
+        </section>
+
+        <section class="column" data-status="in_progress">
+          <h3 class="column-title">In progress <span class="count" id="count-in_progress">0</span></h3>
+          <div class="card-list" id="list-in_progress"></div>
+          <button class="add-task-btn" data-status="in_progress">+ Add task</button>
+        </section>
+
+        <section class="column" data-status="done">
+          <h3 class="column-title">Done <span class="count" id="count-done">0</span></h3>
+          <div class="card-list" id="list-done"></div>
+          <button class="add-task-btn" data-status="done">+ Add task</button>
+        </section>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<!-- ============ Task modal (create / edit) ============ -->
+<div class="modal-overlay hidden" id="taskModalOverlay">
+  <div class="modal">
+    <h2 id="taskModalTitle">New task</h2>
+    <form id="taskForm">
+      <input type="hidden" id="taskId" />
+      <input type="hidden" id="taskStatus" />
+
+      <label for="taskTitleInput">Title</label>
+      <input type="text" id="taskTitleInput" required maxlength="80" placeholder="What needs doing?" />
+
+      <label for="taskDescInput">Description</label>
+      <textarea id="taskDescInput" rows="3" placeholder="Any details worth noting (optional)"></textarea>
+
+      <div class="form-row">
+        <div>
+          <label for="taskPriorityInput">Priority</label>
+          <select id="taskPriorityInput">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div>
+          <label for="taskDueInput">Due date</label>
+          <input type="date" id="taskDueInput" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-primary">Save task</button>
+        <button type="button" class="btn-ghost" id="closeTaskModalBtn">Cancel</button>
+        <button type="button" class="btn-ghost danger hidden" id="deleteTaskBtn">Delete</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# SQLite database (local data, don't commit)
+backend/waypoint.db
+
+# Editor / OS
+.vscode/
+.DS_Store
+Thumbs.db
